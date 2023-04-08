@@ -1,72 +1,125 @@
 <template>
-    <div class="drop-zone" @drop="onDrop($event, 1)" @dragenter.prevent @dragover.prevent>
-         <div v-for="item in getList(1)" :key="item.id" class="drag-el" draggable="true"
-         @dragstart="startDrag($event, item)">
-             {{ item.todo }}
-         </div>
+    <div class="todo-list">
+        <h2>To-Do list</h2>
+        <div class="drop-zone-list">
+            <div class="to-do zone">
+                <p>To-do</p>
+                <div class="to-do drop-zone" @dragenter.prevent @dragover.prevent @drop="dropping($event, 1)">
+                    <div v-for="item in getItem(1)" :key="item.id" class="drag-element" draggable="true"
+                    @dragstart="startDrag($event, item)">
+                    {{ item.todo }}
+                </div>
+            </div>   
+        </div> 
+        
+        <div class="checking zone">
+            <p>Checking</p>
+            <div class="to-do drop-zone" @dragenter.prevent @dragover.prevent @drop="dropping($event, 2)">
+                <div v-for="item in getItem(2)" :key="item.id" class="drag-element" draggable="true"
+                @dragstart="startDrag($event, item)">
+                {{ item.todo }}
+            </div>
+        </div>   
     </div>
-    <div class="drop-zone" @drop="onDrop($event, 2)" @dragenter.prevent @dragover.prevent>
-         <div v-for="item in getList(2)" :key="item.id" class="drag-el" draggable="true"
-         @dragstart="startDrag($event, item)">
-             {{ item.todo }}
-         </div>
-    </div>
- </template>
- 
- <script >
- import {ref} from 'vue'
- 
- export default{
-     setup(){
-         let items = ref([
-             {id: 0, todo: 'Do lesson', list: 1}, 
-             {id: 1, todo: 'Learn dragNdrop', list: 1},
-             {id: 2, todo: 'Do something', list: 2}
-         ]);
- 
-         const getList = (list) => {
-             return items.value.filter(object => object.list === list);
-         }
- 
-         const startDrag = (event, item) => {
-             event.dataTransfer.dropEffect = "move";
-             event.dataTransfer.effectAllowed = "move";
-             event.dataTransfer.setData("itemID", item.id)
-         }
- 
-         const onDrop = (event, list) => {
-             const itemID = event.dataTransfer.getData("itemID");
-             const item = items.value.find(item => item.id == itemID);
-             item.list = list;
-         }
- 
-         return {
-             getList,
-             startDrag,
-             onDrop
-         }
-     }
- }
- 
- </script>
- 
- <style>
-   .drop-zone{
-     min-width: 50%;
-     margin: 50px auto;
-     background-color: gray;
-     padding: 10px;
-     min-height: 10px;
-   }
- 
-   .drag-el{
-     background-color: dodgerblue;
-     color: white;
-     padding: 5px;
-     cursor: pointer;
-     border-radius: 5px;
-   }
-   .drag-el:not(:last-child){
-     margin-bottom: 5px;
-   }
- </style>
+    
+    <div class="done zone">
+        <p>Done</p>
+        <div class="to-do drop-zone" @dragenter.prevent @dragover.prevent @drop="dropping($event, 3)">
+            <div v-for="item in getItem(3)" :key="item.id" class="drag-element" draggable="true"
+            @dragstart="startDrag($event, item)">
+            {{ item.todo }}
+        </div>
+    </div>   
+</div>
+</div>
+</div>
+
+
+
+</template>
+
+<script>
+import { ref } from 'vue';
+
+export default {
+    setup(){
+        const items = ref([{id: 0, todo: 'Do homework', list: 1}, {id: 1, todo: 'Clean house', list: 1 }, {id: 2, todo: 'Make a shopping', list: 1}, {id: 3, todo: 'Read a book', list: 1}, {id: 4, todo: 'Learn new words', list: 1}]);
+        
+        function getItem(list){
+            return items.value.filter(item => item.list === list);
+        }
+        
+        function startDrag(event, item){
+            event.target.style.background = "dodgerblue";
+            event.dataTransfer.dropEffect = "move";
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("itemID", item.id);
+        }
+        
+        function dropping(event, list){
+            const itemId = event.dataTransfer.getData("itemID");
+            items.value.forEach(item => {
+                if (item.id == itemId) {
+                    item.list = list;
+                }
+            });
+        }
+        
+        return {
+            items,
+            getItem,
+            startDrag,
+            dropping,
+        }
+    }    
+}
+
+</script>
+
+<style>
+.todo-list{
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}
+
+.drop-zone-list{
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 15px;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 0 2px 2px lightblue;
+    background-color: lightgray;
+}
+
+.drop-zone{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    min-height: 100px;
+    
+}
+
+.zone{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    width: calc(33.33333% - 15px);
+}
+
+.drag-element{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: slateblue;
+}
+
+
+</style>
