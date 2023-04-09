@@ -1,6 +1,6 @@
 <template>
     <div class="todo-list">
-        <h2>To-Do list</h2>
+        <h2>DragNDrop To-Do list</h2>
         <div class="drop-zone-list">
             <div class="to-do zone">
                 <p>To-do</p>
@@ -33,8 +33,6 @@
 </div>
 </div>
 </div>
-
-
 
 </template>
 

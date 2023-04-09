@@ -2,7 +2,7 @@
   <main>
     <div class="container">
       <div class="dragNdrop-content">
-        <drag-n-drop />
+        <userDirective/>
       </div>
     </div>
   </main>
@@ -11,6 +11,8 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import DragNDrop from './components/DragNDrop.vue';
+import userDirective from './components/userDirective.vue';
+
 
 </script>
 
